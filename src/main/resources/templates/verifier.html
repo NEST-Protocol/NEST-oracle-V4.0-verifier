@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Verifier configuration</title>
+    <link th:href="@{/webjars/bootstrap/3.4.1/css/bootstrap.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.5.1/jquery.js}"></script>
+    <style>
+
+        body {
+            padding: 30px 50px 30px;
+            min-height: 600px;
+        }
+
+        .form-control {
+            width: 450px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <label><h4>1. Verifier configuration</h4></label>
+            <p></p>
+            <label>Whether to enable price data scanning : <span th:text="${verifyState.open?'enabled':'disabled'}"></span></label>
+            <button type="button" class="btn btn-primary" onclick="updateBiteState()"
+                    th:text="${verifyState.open?'disable':'enable'}">
+            </button>
+
+            <p></p>
+            <label>Whether to enable hedging : <span th:text="${verifyState.hedge?'enabled':'disabled'}"></span></label>
+            <button type="button" class="btn btn-primary" onclick="updateHedgeState()"
+                    th:text="${verifyState.hedge?'disable':'enable'}">
+            </button>
+        </div>
+    </div>
+
+    <div class="row" style="border-top: red 1px dotted ;margin-top: 20px">
+        <div class="col-lg-12">
+            <label><h4>2. Token validates the price deviation threshold setting</h4></label>
+            <p></p>
+            <form class="form-inline" id="updateTokenBiteInfo">
+
+                <div class="form-group">
+                    <span>Set a price deviation threshold：</span>
+                    <input type="text" class="form-control" id="biteRate" name="biteRate"
+                           th:value="${#numbers.formatDecimal(verifyState.tokenBiteThreshold,1,'COMMA',4,'POINT')}"
+                           placeholder="Set a price deviation threshold">
+                </div>
+                <p></p>
+                <button type="submit" class="btn btn-primary" onclick="return updateTokenBiteInfo()">update
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+
+    <div class="row" style="border-top: red 1px dotted ;margin-top: 20px">
+        <div class="col-lg-12">
+            <label><h4>3. Batch defrost quantity configuration</h4></label>
+            <p></p>
+            <p></p>
+            <form class="form-inline" id="updateMinnerOtherSetting">
+                <div class="form-group">
+                    <span>Set the minimum quantity of a batch closing quotation:</span>
+                    <input type="text" class="form-control" id="closeMinNum" name="closeMinNum"
+                           th:value="${verifyState.closeMinNum}"
+                    >
+                </div>
+                <button type="submit" class="btn btn-primary" onclick="return updateBiteOtherSetting()">update
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+
+<script type="text/javascript">
+
+
+    function updateBiteOtherSetting() {
+        let val = $('#closeMinNum').val();
+        if (!val) {
+            alert('The quantity of a batch closing quotation cannot be empty');
+            return false;
+        }
+        if (val <= 0) {
+            alert('The number of bulk closing quotes must be greater than 0');
+            return false;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/verifier/updateBiteOtherSetting",
+            async: false,
+            data: $('#updateBiteOtherSetting').serialize(),
+            success: function (result) {
+                if (result.msg) {
+                    alert(result.msg)
+                }
+                location.replace(location);
+            },
+            error: function (result) {
+                alert("The operation failure")
+            }
+        })
+    }
+
+    function updateNtokenBiteInfo() {
+        let val = $('#biteRate2').val();
+        if (!val) {
+            alert('The price deviation threshold cannot be empty');
+            return false;
+        }
+        if (val <= 0) {
+            alert('The price deviation threshold must be greater than 0');
+            return false;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/verifier/updateNtokenBiteInfo",
+            data: $('#updateNtokenBiteInfo').serialize(),
+            async: false,
+            success: function (result) {
+                if (result.msg) {
+                    alert(result.msg)
+                }
+                location.replace(location);
+            },
+            error: function (result) {
+                alert("The operation failure")
+            }
+        })
+    }
+
+    function updateTokenBiteInfo() {
+        let val = $('#biteRate').val();
+        if (!val) {
+            alert('The price deviation threshold cannot be empty');
+            return false;
+        }
+        if (val <= 0) {
+            alert('The price deviation threshold must be greater than 0');
+            return false;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/verifier/updateTokenBiteInfo",
+            data: $('#updateTokenBiteInfo').serialize(),
+            async: false,
+            success: function (result) {
+                if (result.msg) {
+                    alert(result.msg)
+                }
+                location.replace(location);
+            },
+            error: function (result) {
+                alert("The operation failure")
+            }
+        })
+    }
+
+
+    function updateBiteState() {
+        $.ajax({
+            type: "POST",
+            url: "/verifier/updateBiteState",
+            async: false,
+            data: '',
+            success: function (result) {
+                if (result.msg) {
+                    alert(result.msg)
+                }
+                location.replace(location);
+            },
+            error: function (result) {
+                alert("The operation failure")
+            }
+        })
+    }
+
+    function updateHedgeState() {
+        $.ajax({
+            type: "POST",
+            url: "/verifier/updateHedgeState",
+            async: false,
+            data: '',
+            success: function (result) {
+                if (result.msg) {
+                    alert(result.msg)
+                }
+                location.replace(location);
+            },
+            error: function (result) {
+                alert("The operation failure")
+            }
+        })
+    }
+
+</script>
+</html>
+

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>GasPrice configuration</title>
+    <link th:href="@{/webjars/bootstrap/3.4.1/css/bootstrap.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.5.1/jquery.js}"></script>
+    <style>
+
+        body {
+            padding: 30px 50px 30px;
+            min-height: 600px;
+        }
+
+        .line {
+            border-bottom: 0.5px dotted #7c7c7c;
+            width: 550px;
+            padding-bottom: 10px;
+        }
+
+        .form-control {
+            width: 450px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="row" style="border-top: red 1px dotted;margin-top: 20px">
+    <div class="col-lg-12">
+        <label><h4>GasPrice configuration</h4></label>
+        <form class="form-inline" id="updateGasPrice">
+
+            <div class="form-group">
+                <label>1.Eat order GASPrice configuration</label>
+                <br/>
+                <input type="text" class="form-control" id="baseBiteTypeGasPriceMul" name="baseBiteTypeGasPriceMul"
+                       th:value="${gasPriceState.baseBiteType.getGasPriceMul()}"
+                       placeholder="Please fill in the multiple of GASPRICE when eating the order">
+            </div>
+            <br/>
+            <p></p>
+            <div class="form-group line">
+                <label>2.Withdraw asset GASPrice configuration</label>
+                <br/>
+                <input type="text" class="form-control" id="withdrawTypeGasPriceMul" name="withdrawTypeGasPriceMul"
+                       th:value="${gasPriceState.getWithdrawType().getGasPriceMul()}"
+                       placeholder="Please fill in the GASPrice multiple of the withdraw asset">
+            </div>
+            <br/>
+            <p></p>
+            <div class="form-group line">
+                <label>3.Unfreeze the asset GASPrice configuration</label>
+                <br/>
+                <input type="text" class="form-control" id="closeSheetGasPriceMul" name="closeSheetGasPriceMul"
+                       th:value="${gasPriceState.getCloseSheet().getGasPriceMul()}"
+                       placeholder="Please fill in the GASPrice multiple of the unfrozen asset">
+            </div>
+            <br/>
+            <p></p>
+            <button type="submit" class="btn btn-primary" onclick="return updateGasPrice()">confirm</button>
+        </form>
+    </div>
+</div>
+</body>
+
+<script type="text/javascript">
+
+    function updateGasPrice() {
+        let baseBiteTypeGasPriceMul = $('#baseBiteTypeGasPriceMul').val();
+        if (baseBiteTypeGasPriceMul <= 0) {
+            alert('The GasPrice multiple of the eat order must be greater than 0');
+            return false;
+        } else if (baseBiteTypeGasPriceMul>10) {
+            if (!confirm("Warning!! The Gasprice multiple of the order quotation is greater than 10, do you want to continue?")){
+                return false;
+            }
+        }
+
+        let withdrawGasPriceMul = $('#withdrawGasPriceMul').val();
+        if (withdrawGasPriceMul <= 0) {
+            alert('The GasPrice multiple of the withdraw asset Transaction must be greater than 0');
+            return false;
+        } else if (withdrawGasPriceMul>10) {
+            if (!confirm("Warning!!!!! If the GasPrice multiple of the withdraw asset Transaction is greater than 10, should we continue?")){
+                return false;
+            }
+        }
+
+        let closeSheetGasPriceMul = $('#closeSheetGasPriceMul').val();
+        if (closeSheetGasPriceMul <= 0) {
+            alert('The GasPrice multiple of the unfrozen asset must be greater than 0');
+            return false;
+        } else if (closeSheetGasPriceMul>10) {
+            if (!confirm("Warning!!!!! If the GasPrice multiple of the unfrozen asset is greater than 10, should we continue?")){
+                return false;
+            }
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/gasPrice/updateGasPrice",
+            async: false,
+            data: $('#updateGasPrice').serialize(),
+            success: function (result) {
+                if (result.msg) {
+                    alert(result.msg)
+                }
+                location.replace(location);
+            },
+            error: function (result) {
+                alert("The operation failure")
+            }
+        })
+    }
+
+</script>
+</html>
+
