@@ -57,12 +57,12 @@
 
 
 #### 涉及合约接口@BSC
-| 功能 | 接口 | 
-| ---- | ---- |
-| 获取报价单 | [list](https://github.com/NEST-Protocol/NEST-Oracle-V4.0/blob/bsc/contracts/interface/INestOpenMining.sol#L227) | 
-| 吃单获取token0 | [takeToken0](https://github.com/NEST-Protocol/NEST-Oracle-V4.0/blob/bsc/contracts/NestOpenMining.sol#L358) | 
-| 吃单获取token1 | [takeToken1](https://github.com/NEST-Protocol/NEST-Oracle-V4.0/blob/bsc/contracts/NestOpenMining.sol#L442) | 
-| 关闭报价单 | [close](https://github.com/NEST-Protocol/NEST-Oracle-V4.0/blob/bsc/contracts/interface/INestOpenMining.sol#L233) | 
-| 取出资产 | [withdraw](https://github.com/NEST-Protocol/NEST-Oracle-V4.0/blob/bsc/contracts/interface/INestOpenMining.sol#L249) | 
-| 查询解冻资产 | [balanceOf](https://github.com/NEST-Protocol/NEST-Oracle-V4.0/blob/bsc/contracts/interface/INestOpenMining.sol#L244) |
+| 功能 | 接口                                                                                                                      | 
+| ---- |-------------------------------------------------------------------------------------------------------------------------|
+| 报价 | [post](https://github.com/NEST-Protocol/NEST-Oracle-V4.0/blob/bsc/contracts/interfaces/INestBatchMining.sol#L182)       |
+| 获取报价单 | [list](https://github.com/NEST-Protocol/NEST-Oracle-V4.0/blob/bsc/contracts/interfaces/INestBatchMining.sol#L200)      | 
+| 关闭报价单 | [close](https://github.com/NEST-Protocol/NEST-Oracle-V4.0/blob/bsc/contracts/interfaces/INestBatchMining.sol#L212)     | 
+| 取出资产 | [withdraw](https://github.com/NEST-Protocol/NEST-Oracle-V4.0/blob/bsc/contracts/interfaces/INestBatchMining.sol#L223)  | 
+| 预估出矿量 | [estimate](https://github.com/NEST-Protocol/NEST-Oracle-V4.0/blob/bsc/contracts/interfaces/INestBatchMining.sol#L228)  | 
+| 查询解冻资产 | [balanceOf](https://github.com/NEST-Protocol/NEST-Oracle-V4.0/blob/bsc/contracts/interfaces/INestBatchMining.sol#L218) |
 
