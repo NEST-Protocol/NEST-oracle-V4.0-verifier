@@ -53,6 +53,8 @@ public class BiteServiceImpl implements BiteService {
     @Autowired(required = false)
     private HedgeService hedgeService;
 
+    private static BigInteger NONCE = null;
+
     @Override
     public void bite(Wallet wallet) {
         // Check that validation is enabled
@@ -62,8 +64,8 @@ public class BiteServiceImpl implements BiteService {
         }
 
         String address = wallet.getCredentials().getAddress();
-        BigInteger nonce = ethClient.ethGetTransactionCount(address);
-        if (nonce == null) {
+        NONCE = ethClient.ethGetTransactionCount(address);
+        if (NONCE == null) {
             log.error("Failed to get nonce during validation");
             return;
         }
@@ -89,7 +91,7 @@ public class BiteServiceImpl implements BiteService {
         // Perform token quotation verification
         if (!CollectionUtils.isEmpty(tokenSheetPubList)) {
             Erc20State.Item erc20 = erc20State.token;
-            bite = bite(wallet, nonce, tokenSheetPubList, nowBlockNumber, erc20, verifyState.getTokenBiteThreshold());
+            bite = bite(wallet, tokenSheetPubList, nowBlockNumber, erc20, verifyState.getTokenBiteThreshold());
         }
 
         if (bite) {
@@ -104,7 +106,6 @@ public class BiteServiceImpl implements BiteService {
     }
 
     private boolean bite(Wallet wallet,
-                         BigInteger nonce,
                          List<PriceSheetView> sheetPubList,
                          BigInteger nowBlockNumber,
                          Erc20State.Item erc20,
@@ -171,9 +172,9 @@ public class BiteServiceImpl implements BiteService {
             }
 
             // By eating order
-            String hash = sendBiteOffer(priceSheetPub, tokenMultiple, biteToken0, copies, nonce, biteFee, wallet);
+            String hash = sendBiteOffer(priceSheetPub, tokenMultiple, biteToken0, copies, NONCE, biteFee, wallet);
             if (!StringUtils.isEmpty(hash)) {
-                nonce = nonce.add(BigInteger.ONE);
+                NONCE = NONCE.add(BigInteger.ONE);
                 erc20.addBiteIndex(priceSheetPub.index);
                 bite = true;
             }
